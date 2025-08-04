@@ -1,60 +1,44 @@
 # Gabut - Anonymous Message Platform
 
-> 🚀 Aplikasi realtime voting untuk pesan dengan sistem upvote/downvote yang interaktif dan sinkronisasi cloud
+> Aplikasi realtime voting untuk pesan dengan sistem upvote/downvote yang interaktif dan sinkronisasi cloud
 
-Gabut adalah aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim dan memberikan vote (upvote/downvote) secara realtime. Aplikasi ini dilengkapi dengan sistem ranking, sorting, dan penyimpanan data cloud menggunakan **Firebase Firestore** untuk sinkronisasi multi-device.
+Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim dan memberikan vote (upvote/downvote) secara realtime. Aplikasi ini dilengkapi dengan sistem ranking, sorting, dan penyimpanan data cloud menggunakan **Firebase Firestore** untuk sinkronisasi multi-device.
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-### 🔥 Core Features
+### Core Features
 
-- **☁️ Cloud Synchronization** - Data tersinkron real-time di semua perangkat menggunakan Firebase Firestore
-- **🗳️ Real-time Voting System** - Upvote dan downvote pesan secara instant dengan update otomatis
-- **📝 Anonymous Messaging** - Input dan submit pesan tanpa registrasi
-- **🌐 Cross-Device Access** - Akses data dari perangkat manapun, data tidak akan hilang
-- **📱 Responsive Design** - Tampilan optimal di desktop, tablet, dan mobile
+- **Cloud Synchronization** - Data tersinkron real-time di semua perangkat menggunakan Firebase Firestore
+- **Real-time Voting System** - Upvote dan downvote pesan secara instant dengan update otomatis
+- **Anonymous Messaging** - Input dan submit pesan tanpa registrasi
+- **Cross-Device Access** - Akses data dari perangkat manapun, data tidak akan hilang
+- **Responsive Design** - Tampilan optimal di desktop, tablet, dan mobile
 
-### 🚀 Advanced Features
+### Advanced Features
 
-- **🔄 Multi-mode Sorting**:
+- **Multi-mode Sorting**:
   - 🏆 Skor Tertinggi ke Terendah
   - 📉 Skor Terendah ke Tertinggi
   - 🕐 Pesan Terbaru
   - 📅 Pesan Terlama
 
-- **🏅 Dynamic Ranking System**:
+- **Dynamic Ranking System**:
   - 🥇 Badge Top #1 (Gold) dengan highlight khusus
   - 🥈 Badge Top #2 (Silver) dengan border abu-abu
   - 🥉 Badge Top #3 (Bronze) dengan border orange
-  - 📊 Real-time rank updates
+  - Real-time rank updates
 
-- **🎨 Interactive UI/UX**:
-  - Animasi hover dan click effects dengan scale transform
-  - Visual feedback berdasarkan skor (color-coded)
-  - Border dinamis untuk ranking dan skor
-  - Loading states dan error handling
-  - Detailed vote statistics dengan counter
-  - Real-time message updates tanpa refresh
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend Framework**: Vue.js 3 (Composition API)
-- **Build Tool**: Vite 7.x
+- **Build Tool**: Vite 7
 - **Styling**: Tailwind CSS (via CDN)
 - **State Management**: Vue Reactive & Computed Properties
 - **Backend/Database**: Firebase Firestore (NoSQL Cloud Database)
 - **Real-time Updates**: Firebase onSnapshot (WebSocket-based)
-- **Authentication**: Firebase (ready for future implementation)
-- **Hosting**: Compatible with Vercel, Netlify, Firebase Hosting
 - **Language**: JavaScript ES6+ with modern async/await
 
-### 🔥 Firebase Services Used
-
-- **Firestore Database** - Real-time NoSQL database
-- **Firebase SDK v9+** - Modular SDK for optimized bundle size
-- **Security Rules** - Server-side validation and access control
-
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 
@@ -62,13 +46,13 @@ Gabut adalah aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan 
 - **npm** atau yarn
 - **Firebase Account** (gratis)
 
-### 🔧 Quick Setup
+### Quick Setup
 
 1. **Clone repository**
 
    ```bash
    git clone https://github.com/gbennnn/gabut.git
-   cd gabut-v2
+   cd gabut
    ```
 
 2. **Install dependencies**
@@ -102,19 +86,7 @@ Gabut adalah aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan 
    http://localhost:5173
    ```
 
-### 🔐 Security Setup
-
-**PENTING**: File `firebase.js` berisi API keys sensitif dan sudah di-exclude dari git.
-
-```bash
-# File ini akan di-ignore oleh git
-src/firebase.js
-
-# Yang di-commit ke GitHub hanya template
-src/firebase.template.js
-```
-
-### 📦 Production Build
+### Production Build
 
 ```bash
 # Build untuk production
@@ -127,7 +99,7 @@ npm run preview
 npm run build && vercel --prod
 ```
 
-## 📊 Data Structure
+## Data Structure
 
 ### Message Object (Firestore Document)
 
@@ -170,7 +142,7 @@ graph LR
     E --> F[Auto UI Update]
 ```
 
-## 🔒 Security & Privacy
+## Security & Privacy
 
 ### Firestore Security Rules
 
@@ -199,137 +171,20 @@ service cloud.firestore {
 
 ### Privacy Features
 
-- 🔒 **Fully Anonymous** - No user registration or tracking
-- 🛡️ **Server-side Validation** - Firebase rules prevent malicious data
-- 🚫 **No Personal Data** - Only message content and votes stored
-- 🌐 **HTTPS Only** - All Firebase communication encrypted
+- **Fully Anonymous** - No user registration or tracking
+- **Server-side Validation** - Firebase rules prevent malicious data
+- **No Personal Data** - Only message content and votes stored
+- **HTTPS Only** - All Firebase communication encrypted
 
-## 🚨 Troubleshooting
-
-### Common Issues
-
-**❌ "Missing or insufficient permissions"**
-
-```bash
-# Solution: Update Firestore rules in Firebase Console
-allow read, write: if true;
-```
-
-**❌ "Failed to connect to Firestore"**
-
-```bash
-# Check firebase.js config and internet connection
-# Verify Firebase project ID and API keys
-```
-
-**❌ "Collection 'messages' not found"**
-
-```bash
-# Create collection manually in Firebase Console
-# Collection ID: messages
-```
-
-Lihat panduan lengkap di:
-
-- 📚 `FIREBASE_SETUP.md` - Setup Firebase step-by-step
-- 🔐 `FIREBASE_SECURITY.md` - Security best practices
-- 🔍 `TROUBLESHOOT.md` - Debugging guide
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get started:
-
-### Development Workflow
-
-1. **Fork repository**
-2. **Create feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Setup Firebase**
-   ```bash
-   cp src/firebase.template.js src/firebase.js
-   # Add your Firebase config
-   ```
-4. **Make changes and test**
-   ```bash
-   npm run dev
-   ```
-5. **Commit changes**
-   ```bash
-   git commit -m 'feat: add amazing feature'
-   ```
-6. **Push to branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-7. **Open Pull Request**
-
-### 🚫 What NOT to Commit
-
-- `src/firebase.js` (contains API keys)
-- `.env` files with secrets
-- `node_modules/`
-- Personal configuration files
-
-### 📝 Commit Convention
-
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - New features
-- `fix:` - Bug fixes
-- `docs:` - Documentation updates
-- `style:` - Code style changes
-- `refactor:` - Code refactoring
-- `test:` - Adding tests
-- `chore:` - Maintenance tasks
-
-## 📋 Features Roadmap
-
-### ✅ Completed
-
-- ✅ Firebase Firestore integration
-- ✅ Real-time message sync
-- ✅ Voting system with real-time updates
-- ✅ Responsive design
-- ✅ Security rules implementation
-- ✅ Cross-device data persistence
-
-### 🚧 In Progress
-
-- 🔄 Rate limiting for spam prevention
-- 🔄 Message character counter
-- 🔄 Better error handling
-
-### 🎯 Planned
-
-- 📱 PWA (Progressive Web App) support
-- 🔐 Optional user authentication
-- 🏷️ Message categories/tags
-- 📈 Analytics dashboard
-- 🌙 Dark mode theme
-- 🌍 Multi-language support
-- 🔔 Push notifications
-- 📊 Vote statistics charts
-
-## 📜 License
+## License
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
-## 🔗 Links
+## Links
 
-- 🌐 **Live Demo**: [gabut-app.vercel.app](https://gabut-app.vercel.app) _(coming soon)_
-- 📚 **Documentation**: See `/docs` folder
-- 🐛 **Report Bug**: [GitHub Issues](https://github.com/gbennnn/gabut/issues)
-- 💡 **Request Feature**: [GitHub Discussions](https://github.com/gbennnn/gabut/discussions)
-
-## 👨‍💻 Author
-
-**Gabriel Benony**
-
-- 🐙 GitHub: [@gbennnn](https://github.com/gbennnn)
-- 🐦 Twitter: [@iambeno\_](https://twitter.com/iambeno_)
-- 💼 LinkedIn: [benonygabriel](https://linkedin.com/in/benonygabriel)
+- **Live Demo**: [gabut.vercel.app](gabut-five-phi.vercel.app)
+- **Report Bug**: [GitHub Issues](https://github.com/gbennnn/gabut/issues)
+- **Request Feature**: [GitHub Discussions](https://github.com/gbennnn/gabut/discussions)
 
 ---
 
