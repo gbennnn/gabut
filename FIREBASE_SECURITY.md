@@ -7,11 +7,13 @@ File `firebase.js` berisi **API keys sensitif** yang **TIDAK BOLEH** di-commit k
 ## 🚀 Setup untuk Development/Production
 
 ### 1. Copy Template Firebase Config
+
 ```bash
 cp src/firebase.template.js src/firebase.js
 ```
 
 ### 2. Dapatkan Firebase Config
+
 1. Buka [Firebase Console](https://console.firebase.google.com/)
 2. Pilih project Anda
 3. Klik ⚙️ **Settings** > **Project settings**
@@ -19,13 +21,14 @@ cp src/firebase.template.js src/firebase.js
 5. Copy config object
 
 ### 3. Update firebase.js
+
 Ganti placeholder values di `src/firebase.js` dengan config asli Anda:
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "AIzaSy...", // Ganti dengan API key asli
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
+  apiKey: 'AIzaSy...', // Ganti dengan API key asli
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
   // ... config lainnya
 }
 ```
@@ -33,11 +36,13 @@ const firebaseConfig = {
 ## 🔒 Security Best Practices
 
 ### ✅ Yang AMAN untuk GitHub:
+
 - `firebase.template.js` ✅
 - `FIREBASE_SETUP.md` ✅
 - Code aplikasi tanpa API keys ✅
 
 ### ❌ Yang TIDAK BOLEH di GitHub:
+
 - `firebase.js` dengan API keys asli ❌
 - `.env` files dengan secrets ❌
 - Any file dengan API keys ❌
@@ -45,6 +50,7 @@ const firebaseConfig = {
 ## 🌐 Deployment ke Production
 
 ### Opsi 1: Environment Variables (Vercel/Netlify)
+
 ```javascript
 // firebase.js for production
 const firebaseConfig = {
@@ -55,10 +61,12 @@ const firebaseConfig = {
 ```
 
 Set environment variables di hosting platform:
+
 - `VITE_FIREBASE_API_KEY=your-actual-api-key`
 - `VITE_FIREBASE_AUTH_DOMAIN=your-domain`
 
 ### Opsi 2: Build Script
+
 Buat script yang otomatis replace template saat build.
 
 ## 🔄 Workflow yang Aman
@@ -88,5 +96,6 @@ Buat script yang otomatis replace template saat build.
 3. **Force push:** `git push origin --force --all`
 
 ## 📚 Resources
+
 - [Firebase Security Best Practices](https://firebase.google.com/docs/rules/get-started)
 - [Environment Variables in Vite](https://vitejs.dev/guide/env-and-mode.html)
