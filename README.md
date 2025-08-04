@@ -108,29 +108,6 @@ npm run preview
 }
 ```
 
-## Deployment
-
-### Vercel (Recommended)
-
-```bash
-npm install -g vercel
-vercel --prod
-```
-
-### Netlify
-
-```bash
-npm run build
-# Upload folder dist/ ke Netlify
-```
-
-### GitHub Pages
-
-```bash
-npm run build
-# Deploy folder dist/ ke gh-pages branch
-```
-
 ## Contributing
 
 1. Fork repository
