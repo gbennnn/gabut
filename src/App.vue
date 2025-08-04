@@ -269,7 +269,7 @@ onMounted(() => {
 
         <!-- <div class="mt-4 flex justify-center items-center space-x-4">
           <span class="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full">
-            ☁️ Data tersinkron secara real-time
+            Data tersinkron secara real-time
           </span>
         </div> -->
       </div>
