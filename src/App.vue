@@ -322,8 +322,8 @@ watch(
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-4.907-1.47L5 21l1.47-3.093A8.955 8.955 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"
               ></path>
             </svg>
-            <p class="text-lg font-medium">Belum ada pesan</p>
-            <p class="text-sm">Jadilah yang pertama untuk berbagi!</p>
+            <p class="text-lg font-medium">No messages yet</p>
+            <p class="text-sm">Be the first to share something!</p>
           </div>
         </div>
 
