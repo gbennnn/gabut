@@ -61,12 +61,7 @@ service cloud.firestore {
 }
 ```
 
-### 5. Ganti File App.vue
-
-1. Backup file `App.vue` yang lama (rename ke `App-LocalStorage.vue`)
-2. Rename `App-Firebase.vue` menjadi `App.vue`
-
-### 6. Update package.json Script (Opsional)
+### 5. Update package.json Script (Opsional)
 
 Tambahkan script untuk development dengan Firebase:
 
@@ -81,7 +76,7 @@ Tambahkan script untuk development dengan Firebase:
 }
 ```
 
-### 7. Testing
+### 6. Testing
 
 1. Jalankan `npm run dev`
 2. Test aplikasi di localhost
