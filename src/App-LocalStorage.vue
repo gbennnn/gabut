@@ -1,18 +1,5 @@
 <script setup>
 import { ref, reactive, watch, onMounted, computed } from 'vue'
-import { db } from './firebase.js'
-import {
-  collection,
-  addDoc,
-  onSnapshot,
-  updateDoc,
-  doc,
-  deleteDoc,
-  orderBy,
-  query,
-  serverTimestamp,
-  increment,
-} from 'firebase/firestore'
 
 // State untuk input pesan
 const message = ref('')
@@ -23,12 +10,11 @@ const messages = reactive([])
 // State untuk sorting
 const sortBy = ref('score-desc') // 'score-desc', 'score-asc', 'newest', 'oldest'
 
-// State untuk loading
-const loading = ref(true)
-const submitting = ref(false)
+// Counter untuk ID unik setiap pesan
+let messageId = 0
 
-// Reference ke collection messages di Firestore
-const messagesCollection = collection(db, 'messages')
+// Key untuk localStorage
+const STORAGE_KEY = 'gabut-vote-messages'
 
 // Computed property untuk pesan yang sudah diurutkan
 const sortedMessages = computed(() => {
@@ -40,74 +26,112 @@ const sortedMessages = computed(() => {
     case 'score-asc':
       return messagesCopy.sort((a, b) => getScore(a) - getScore(b))
     case 'newest':
-      return messagesCopy.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      return messagesCopy.sort((a, b) => b.id - a.id)
     case 'oldest':
-      return messagesCopy.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+      return messagesCopy.sort((a, b) => a.id - b.id)
     default:
       return messagesCopy
   }
 })
 
-// Fungsi untuk submit pesan ke Firestore
-const submitMessage = async () => {
-  if (message.value.trim() && !submitting.value) {
-    submitting.value = true
-    try {
-      await addDoc(messagesCollection, {
-        text: message.value.trim(),
-        upvotes: 0,
-        downvotes: 0,
-        timestamp: serverTimestamp(),
-        createdAt: new Date().toISOString(),
-      })
-      message.value = ''
-    } catch (error) {
-      console.error('Error adding message:', error)
-      alert('Gagal mengirim pesan. Silakan coba lagi.')
-    } finally {
-      submitting.value = false
-    }
-  }
-}
-
-// Fungsi untuk upvote
-const upvote = async (id) => {
+// Fungsi untuk menyimpan data ke localStorage
+const saveToStorage = () => {
   try {
-    const messageRef = doc(db, 'messages', id)
-    await updateDoc(messageRef, {
-      upvotes: increment(1),
-    })
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        messages: messages,
+        messageId: messageId,
+        sortBy: sortBy.value,
+      }),
+    )
   } catch (error) {
-    console.error('Error upvoting:', error)
+    console.error('Error saving to localStorage:', error)
   }
 }
 
-// Fungsi untuk downvote
-const downvote = async (id) => {
+// Fungsi untuk memuat data dari localStorage
+const loadFromStorage = () => {
   try {
-    const messageRef = doc(db, 'messages', id)
-    await updateDoc(messageRef, {
-      downvotes: increment(1),
-    })
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const data = JSON.parse(stored)
+      if (data.messages && Array.isArray(data.messages)) {
+        // Clear array dan push data yang dimuat
+        messages.splice(0, messages.length, ...data.messages)
+        messageId = data.messageId || 0
+        sortBy.value = data.sortBy || 'score-desc'
+      }
+    }
   } catch (error) {
-    console.error('Error downvoting:', error)
+    console.error('Error loading from localStorage:', error)
   }
 }
 
-// Fungsi untuk hapus pesan (disabled untuk keamanan)
-const deleteMessage = async (id) => {
-  if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
-    try {
-      await deleteDoc(doc(db, 'messages', id))
-    } catch (error) {
-      console.error('Error deleting message:', error)
-    }
+// Fungsi untuk submit pesan
+const submitMessage = () => {
+  if (message.value.trim()) {
+    messages.push({
+      id: messageId++,
+      text: message.value.trim(),
+      upvotes: 0,
+      downvotes: 0,
+      timestamp: new Date().toLocaleString('id-ID'),
+    })
+    message.value = ''
+    saveToStorage() // Simpan setelah menambah pesan
+  }
+}
+
+// Fungsi untuk upvote dengan animasi feedback
+const upvote = (id) => {
+  const msg = messages.find((m) => m.id === id)
+  if (msg) {
+    msg.upvotes++
+    saveToStorage() // Simpan setelah upvote
+
+    // Animasi feedback (optional)
+    setTimeout(() => {
+      // Trigger re-sort jika diperlukan
+    }, 100)
+  }
+}
+
+// Fungsi untuk downvote dengan animasi feedback
+const downvote = (id) => {
+  const msg = messages.find((m) => m.id === id)
+  if (msg) {
+    msg.downvotes++
+    saveToStorage() // Simpan setelah downvote
+
+    // Animasi feedback (optional)
+    setTimeout(() => {
+      // Trigger re-sort jika diperlukan
+    }, 100)
+  }
+}
+
+// Fungsi untuk hapus pesan
+const deleteMessage = (id) => {
+  const index = messages.findIndex((m) => m.id === id)
+  if (index > -1) {
+    messages.splice(index, 1)
+    saveToStorage() // Simpan setelah hapus
+  }
+}
+
+// Fungsi untuk reset semua data
+const resetAllData = () => {
+  if (confirm('Apakah Anda yakin ingin menghapus semua pesan?')) {
+    messages.splice(0, messages.length)
+    messageId = 0
+    saveToStorage()
   }
 }
 
 // Fungsi untuk mendapatkan skor total
 const getScore = (msg) => {
-  return (msg.upvotes || 0) - (msg.downvotes || 0)
+  return msg.upvotes - msg.downvotes
 }
 
 // Fungsi untuk mendapatkan badge rank berdasarkan posisi
@@ -137,51 +161,19 @@ const getScoreClass = (score) => {
   return 'text-red-600 font-bold'
 }
 
-// Fungsi untuk format timestamp
-const formatTimestamp = (timestamp) => {
-  if (!timestamp) return 'Just now'
-
-  let date
-  if (timestamp.toDate) {
-    // Firebase Timestamp
-    date = timestamp.toDate()
-  } else if (timestamp instanceof Date) {
-    date = timestamp
-  } else {
-    date = new Date(timestamp)
-  }
-
-  return date.toLocaleString('id-ID')
-}
-
-// Setup real-time listener untuk messages
+// Load data saat komponen dimount
 onMounted(() => {
-  const q = query(messagesCollection, orderBy('timestamp', 'desc'))
-
-  const unsubscribe = onSnapshot(
-    q,
-    (querySnapshot) => {
-      const newMessages = []
-      querySnapshot.forEach((doc) => {
-        newMessages.push({
-          id: doc.id,
-          ...doc.data(),
-        })
-      })
-
-      // Clear dan replace messages
-      messages.splice(0, messages.length, ...newMessages)
-      loading.value = false
-    },
-    (error) => {
-      console.error('Error getting messages:', error)
-      loading.value = false
-    },
-  )
-
-  // Cleanup listener when component unmounts
-  return () => unsubscribe()
+  loadFromStorage()
 })
+
+// Watch perubahan pada messages untuk auto-save (optional backup)
+watch(
+  messages,
+  () => {
+    // Auto-save sudah dipanggil manual di setiap fungsi
+  },
+  { deep: true },
+)
 </script>
 
 <template>
@@ -239,9 +231,16 @@ onMounted(() => {
         </div>
 
         <div class="mt-4 flex justify-center items-center space-x-4">
-          <span class="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full">
-            ☁️ Data tersinkron secara real-time
-          </span>
+          <!-- <span class="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full">
+            💾 Data tersimpan otomatis
+          </span> -->
+          <!-- <button
+            v-if="messages.length > 0"
+            @click="resetAllData"
+            class="text-sm text-red-600 bg-red-100 hover:bg-red-200 px-3 py-1 rounded-full transition duration-200"
+          >
+            🗑️ Reset Semua Data
+          </button> -->
         </div>
       </div>
 
@@ -259,16 +258,13 @@ onMounted(() => {
               rows="3"
               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               required
-              :disabled="submitting"
             ></textarea>
           </div>
           <button
             type="submit"
-            :disabled="submitting || !message.trim()"
-            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 font-medium"
           >
-            <span v-if="submitting">Sending...</span>
-            <span v-else>Submit Message</span>
+            Submit Message
           </button>
         </form>
       </div>
@@ -284,30 +280,8 @@ onMounted(() => {
         </a>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="loading" class="text-center py-12 bg-white rounded-lg shadow-md">
-        <div class="text-gray-500">
-          <svg class="animate-spin mx-auto h-8 w-8 mb-4" fill="none" viewBox="0 0 24 24">
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          <p class="text-lg font-medium">Loading messages...</p>
-        </div>
-      </div>
-
       <!-- Daftar Pesan -->
-      <div v-else class="space-y-4">
+      <div class="space-y-4">
         <!-- Kontrol Sorting -->
         <div
           v-if="messages.length > 0"
@@ -322,6 +296,7 @@ onMounted(() => {
             <select
               id="sortBy"
               v-model="sortBy"
+              @change="saveToStorage"
               class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="score-desc">🏆 Highest Score</option>
@@ -390,14 +365,14 @@ onMounted(() => {
               </span>
               <span class="text-xs text-gray-500">skor</span>
               <div class="text-xs text-gray-400 text-center">
-                <div>👍 {{ msg.upvotes || 0 }}</div>
-                <div>👎 {{ msg.downvotes || 0 }}</div>
+                <div>👍 {{ msg.upvotes }}</div>
+                <div>👎 {{ msg.downvotes }}</div>
               </div>
             </div>
           </div>
 
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-500">{{ formatTimestamp(msg.timestamp) }}</span>
+            <span class="text-sm text-gray-500">{{ msg.timestamp }}</span>
 
             <div class="flex space-x-2">
               <!-- Tombol Upvote -->
@@ -413,7 +388,7 @@ onMounted(() => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="font-bold">{{ msg.upvotes || 0 }}</span>
+                <span class="font-bold">{{ msg.upvotes }}</span>
               </button>
 
               <!-- Tombol Downvote -->
@@ -429,8 +404,23 @@ onMounted(() => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="font-bold">{{ msg.downvotes || 0 }}</span>
+                <span class="font-bold">{{ msg.downvotes }}</span>
               </button>
+
+              <!-- Tombol Delete -->
+              <!-- <button
+                @click="deleteMessage(msg.id)"
+                class="flex items-center space-x-1 px-3 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-red-100 hover:text-red-600 hover:scale-105 active:scale-95 transition-all duration-200 text-sm font-medium shadow-sm"
+                title="Hapus pesan"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button> -->
             </div>
           </div>
         </div>

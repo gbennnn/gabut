@@ -28,3 +28,23 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Firebase and environment files
+# IMPORTANT: Never commit Firebase config with real API keys!
+src/firebase.js
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Firebase cache and logs
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# API Keys and sensitive files
+config.js
+secrets.json
+*.key
+*.pem
