@@ -48,3 +48,5 @@ config.js
 secrets.json
 *.key
 *.pem
+
+FIREBASE_SECURITY.md
