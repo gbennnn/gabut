@@ -50,23 +50,39 @@ const sortedMessages = computed(() => {
 
 // Fungsi untuk submit pesan ke Firestore
 const submitMessage = async () => {
+  console.log('Submit message called:', message.value)
   if (message.value.trim() && !submitting.value) {
     submitting.value = true
+    console.log('Attempting to add document to Firestore...')
     try {
-      await addDoc(messagesCollection, {
+      const docData = {
         text: message.value.trim(),
         upvotes: 0,
         downvotes: 0,
         timestamp: serverTimestamp(),
         createdAt: new Date().toISOString(),
-      })
+      }
+      console.log('Document data:', docData)
+
+      const docRef = await addDoc(messagesCollection, docData)
+      console.log('Document successfully added with ID:', docRef.id)
       message.value = ''
     } catch (error) {
       console.error('Error adding message:', error)
-      alert('Gagal mengirim pesan. Silakan coba lagi.')
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        stack: error.stack,
+      })
+      alert('Gagal mengirim pesan. Silakan coba lagi. Error: ' + error.message)
     } finally {
       submitting.value = false
     }
+  } else {
+    console.log('Submit conditions not met:', {
+      messageEmpty: !message.value.trim(),
+      submitting: submitting.value,
+    })
   }
 }
 
@@ -156,25 +172,38 @@ const formatTimestamp = (timestamp) => {
 
 // Setup real-time listener untuk messages
 onMounted(() => {
+  console.log('Setting up Firebase real-time listener...')
+  console.log('Database object:', db)
+  console.log('Messages collection:', messagesCollection)
+
   const q = query(messagesCollection, orderBy('timestamp', 'desc'))
 
   const unsubscribe = onSnapshot(
     q,
     (querySnapshot) => {
+      console.log('Firestore snapshot received, document count:', querySnapshot.size)
       const newMessages = []
       querySnapshot.forEach((doc) => {
+        const data = doc.data()
+        console.log('Document received:', doc.id, data)
         newMessages.push({
           id: doc.id,
-          ...doc.data(),
+          ...data,
         })
       })
 
       // Clear dan replace messages
+      console.log('Updating messages array with', newMessages.length, 'messages')
       messages.splice(0, messages.length, ...newMessages)
       loading.value = false
+      console.log('Messages updated successfully')
     },
     (error) => {
       console.error('Error getting messages:', error)
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+      })
       loading.value = false
     },
   )
@@ -238,11 +267,11 @@ onMounted(() => {
           </a>
         </div>
 
-        <div class="mt-4 flex justify-center items-center space-x-4">
+        <!-- <div class="mt-4 flex justify-center items-center space-x-4">
           <span class="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full">
             ☁️ Data tersinkron secara real-time
           </span>
-        </div>
+        </div> -->
       </div>
 
       <!-- Form Input Pesan -->
