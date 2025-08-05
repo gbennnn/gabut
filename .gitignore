@@ -51,3 +51,5 @@ secrets.json
 
 FIREBASE_SECURITY.md
 TROUBLESHOOT.md
+src/firebase-debug.js
+src/firebase.template.js
