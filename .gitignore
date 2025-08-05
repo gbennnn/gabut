@@ -31,7 +31,7 @@ coverage
 
 # Firebase and environment files
 # IMPORTANT: Never commit Firebase config with real API keys!
-# src/firebase.js
+src/firebase.js
 .env
 .env.local
 .env.development.local
