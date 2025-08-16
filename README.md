@@ -1,7 +1,4 @@
 # Gabut - Anonymous Message Platform
-
-> Aplikasi realtime voting untuk pesan dengan sistem upvote/downvote yang interaktif dan sinkronisasi cloud
-
 Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim dan memberikan vote (upvote/downvote) secara realtime. Aplikasi ini dilengkapi dengan sistem ranking, sorting, dan penyimpanan data cloud menggunakan **Firebase Firestore** untuk sinkronisasi multi-device.
 
 ## Fitur Utama
@@ -86,19 +83,6 @@ Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim
    http://localhost:5173
    ```
 
-### Production Build
-
-```bash
-# Build untuk production
-npm run build
-
-# Preview build hasil
-npm run preview
-
-# Deploy ke hosting (contoh: Vercel)
-npm run build && vercel --prod
-```
-
 ## Data Structure
 
 ### Message Object (Firestore Document)
@@ -129,17 +113,6 @@ npm run build && vercel --prod
     ├── upvotes: 2
     ├── downvotes: 0
     └── ...
-```
-
-### Real-time Data Flow
-
-```mermaid
-graph LR
-    A[User Input] --> B[Vue App]
-    B --> C[Firebase Firestore]
-    C --> D[Real-time Listener]
-    D --> E[All Connected Clients]
-    E --> F[Auto UI Update]
 ```
 
 ## Security & Privacy
@@ -179,14 +152,6 @@ service cloud.firestore {
 ## License
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
-
-## Links
-
-- **Live Demo**: [gabut.vercel.app](gabut-five-phi.vercel.app)
-- **Report Bug**: [GitHub Issues](https://github.com/gbennnn/gabut/issues)
-- **Request Feature**: [GitHub Discussions](https://github.com/gbennnn/gabut/discussions)
-
----
 
 <div align="center">
   <p>⭐ Star this repo if you find it helpful!</p>
