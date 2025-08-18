@@ -2,6 +2,10 @@
 
 A modern web application that allows users to share messages anonymously and vote (upvote/downvote) in real time. The app features ranking, sorting, and cloud data storage using **Firebase Firestore** for multi-device synchronization.
 
+## Preview
+
+![Preview](./preview.gif)
+
 ## Main Features
 
 ### Core Features
