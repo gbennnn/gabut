@@ -1,28 +1,29 @@
 # Gabut - Anonymous Message Platform
-Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim dan memberikan vote (upvote/downvote) secara realtime. Aplikasi ini dilengkapi dengan sistem ranking, sorting, dan penyimpanan data cloud menggunakan **Firebase Firestore** untuk sinkronisasi multi-device.
 
-## Fitur Utama
+A modern web application that allows users to share messages anonymously and vote (upvote/downvote) in real time. The app features ranking, sorting, and cloud data storage using **Firebase Firestore** for multi-device synchronization.
+
+## Main Features
 
 ### Core Features
 
-- **Cloud Synchronization** - Data tersinkron real-time di semua perangkat menggunakan Firebase Firestore
-- **Real-time Voting System** - Upvote dan downvote pesan secara instant dengan update otomatis
-- **Anonymous Messaging** - Input dan submit pesan tanpa registrasi
-- **Cross-Device Access** - Akses data dari perangkat manapun, data tidak akan hilang
-- **Responsive Design** - Tampilan optimal di desktop, tablet, dan mobile
+- **Cloud Synchronization** - Real-time data sync across all devices using Firebase Firestore
+- **Real-time Voting System** - Instantly upvote and downvote messages with automatic updates
+- **Anonymous Messaging** - Input and submit messages without registration
+- **Cross-Device Access** - Access your data from any device, data is never lost
+- **Responsive Design** - Optimized display for desktop, tablet, and mobile
 
 ### Advanced Features
 
 - **Multi-mode Sorting**:
-  - 🏆 Skor Tertinggi ke Terendah
-  - 📉 Skor Terendah ke Tertinggi
-  - 🕐 Pesan Terbaru
-  - 📅 Pesan Terlama
+  - 🏆 Highest to Lowest Score
+  - 📉 Lowest to Highest Score
+  - 🕐 Newest Messages
+  - 📅 Oldest Messages
 
 - **Dynamic Ranking System**:
-  - 🥇 Badge Top #1 (Gold) dengan highlight khusus
-  - 🥈 Badge Top #2 (Silver) dengan border abu-abu
-  - 🥉 Badge Top #3 (Bronze) dengan border orange
+  - 🥇 Top #1 Badge (Gold) with special highlight
+  - 🥈 Top #2 Badge (Silver) with gray border
+  - 🥉 Top #3 Badge (Bronze) with orange border
   - Real-time rank updates
 
 ## Tech Stack
@@ -39,9 +40,9 @@ Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim
 
 ### Prerequisites
 
-- **Node.js** (v20.19.0 atau lebih tinggi)
-- **npm** atau yarn
-- **Firebase Account** (gratis)
+- **Node.js** (v20.19.0 or higher)
+- **npm** or yarn
+- **Firebase Account** (free)
 
 ### Quick Setup
 
@@ -66,11 +67,11 @@ Aplikasi web modern yang memungkinkan pengguna untuk berbagi pesan secara anonim
    ```
 
 4. **Configure Firebase**
-   - Buat project baru di [Firebase Console](https://console.firebase.google.com/)
+   - Create a new project in [Firebase Console](https://console.firebase.google.com/)
    - Enable Firestore Database
-   - Copy config dari Project Settings
-   - Paste ke `src/firebase.js`
-   - Lihat panduan lengkap di `FIREBASE_SETUP.md`
+   - Copy config from Project Settings
+   - Paste into `src/firebase.js`
+   - See full guide in `FIREBASE_SETUP.md`
 
 5. **Run development server**
 
