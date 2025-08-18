@@ -1,35 +1,35 @@
-# Setup Firebase untuk Gabut V2
+# Firebase Setup for GabutApp
 
-## Langkah-langkah Setup Firebase:
+## Firebase Setup Steps:
 
-### 1. Buat Project Firebase
+### 1. Create a Firebase Project
 
-1. Kunjungi [Firebase Console](https://console.firebase.google.com/)
-2. Klik "Add project" atau "Tambah project"
-3. Berikan nama project (contoh: "gabut-messages")
-4. Disable Google Analytics (opsional)
-5. Klik "Create project"
+1. Visit the [Firebase Console](https://console.firebase.google.com/)
+2. Click "Add project"
+3. Enter a project name (e.g., "gabut-messages")
+4. Disable Google Analytics (optional)
+5. Click "Create project"
 
-### 2. Setup Firestore Database
+### 2. Set Up Firestore Database
 
-1. Di Firebase Console, klik "Firestore Database"
-2. Klik "Create database"
-3. Pilih "Start in test mode" (untuk development)
-4. Pilih location yang paling dekat dengan users Anda (asia-southeast1 untuk Indonesia)
-5. Klik "Done"
+1. In the Firebase Console, click "Firestore Database"
+2. Click "Create database"
+3. Select "Start in test mode" (for development)
+4. Choose the location closest to your users (asia-southeast1 for Indonesia)
+5. Click "Done"
 
-### 3. Dapatkan Config Firebase
+### 3. Get Firebase Config
 
-1. Di Firebase Console, klik ikon gear ⚙️ lalu "Project settings"
-2. Scroll ke bawah, klik "Add app" dan pilih icon web "</>"
-3. Berikan nama app (contoh: "gabut-web")
-4. Copy config object yang diberikan
-5. Paste ke file `src/firebase.js`, ganti bagian "your-api-key" dll
+1. In the Firebase Console, click the gear icon ⚙️ then "Project settings"
+2. Scroll down, click "Add app" and select the web icon "</>"
+3. Enter an app name (e.g., "gabut-web")
+4. Copy the provided config object
+5. Paste it into `src/firebase.js`, replacing "your-api-key" and other placeholders
 
-### 4. Setup Firestore Rules (Opsional - Untuk Keamanan)
+### 4. Set Up Firestore Rules (Optional - For Security)
 
-1. Di Firestore Database, klik tab "Rules"
-2. Ganti rules dengan:
+1. In Firestore Database, click the "Rules" tab
+2. Replace the rules with:
 
 ```javascript
 rules_version = '2';
@@ -61,46 +61,9 @@ service cloud.firestore {
 }
 ```
 
-### 5. Update package.json Script (Opsional)
+### 5. Testing
 
-Tambahkan script untuk development dengan Firebase:
-
-```json
-{
-  "scripts": {
-    "dev": "vite",
-    "dev:firebase": "vite --host",
-    "build": "vite build",
-    "preview": "vite preview"
-  }
-}
-```
-
-### 6. Testing
-
-1. Jalankan `npm run dev`
-2. Test aplikasi di localhost
-3. Test di perangkat lain dengan IP address yang sama
-4. Build dan deploy untuk production
-
-## Keuntungan Firebase:
-
-- ✅ Data tersimpan di cloud, bisa diakses dari perangkat manapun
-- ✅ Real-time updates (pesan muncul langsung tanpa refresh)
-- ✅ Gratis untuk usage kecil-menengah
-- ✅ Auto-scaling
-- ✅ Tidak perlu setup server backend
-
-## Alternative Cloud Database:
-
-Jika tidak ingin menggunakan Firebase, alternatif lain:
-
-1. **Supabase** (PostgreSQL-based, open source)
-2. **PlanetScale** (MySQL-based)
-3. **MongoDB Atlas** (NoSQL)
-4. **AWS DynamoDB** (NoSQL)
-5. **Vercel KV** (Redis-based)
-
-## Langkah Migrasi Data Existing:
-
-Jika Anda sudah punya data di localStorage, buat script migrasi untuk memindahkan data ke Firebase.
+1. Run `npm run dev`
+2. Test the app on localhost
+3. Test on other devices using the same IP address
+4. Build and deploy for production
